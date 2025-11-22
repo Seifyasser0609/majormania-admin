@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>MAJORMANIA - Admin Dashboard</title>
+
+    <!-- Firebase Compat SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <!-- Firebase config (after SDKs) -->
+    <script src="firebase-config.js"></script>
+
+    <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+
+<script>
+firebase.auth().onAuthStateChanged((user) => {
+    if (!user) {
+        window.location.href = "admin-login.html";
+    }
+});
+</script>
+
+    <div class="admin-container">
+        <header class="admin-header">
+            <button onclick="logoutAdmin()" class="btn btn-logout">Logout</button>
+
+            <h1>🎯 MAJORMANIA Admin Dashboard</h1>
+            <div class="admin-actions">
+                <button class="btn btn-export" onclick="exportOrdersToCSV()">📊 Export CSV</button>
+                <span class="order-count" id="orderCount">0 orders</span>
+            </div>
+        </header>
+
+        <div class="admin-controls">
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">All Orders</button>
+                <button class="filter-btn" data-filter="pending">⏳ Pending</button>
+                <button class="filter-btn" data-filter="confirmed">✅ Confirmed</button>
+                <button class="filter-btn" data-filter="shipped">🚚 Shipped</button>
+                <button class="filter-btn" data-filter="delivered">🎉 Delivered</button>
+                <button class="filter-btn" data-filter="cancelled">❌ Cancelled</button>
+            </div>
+            <div class="search-box">
+                <input type="text" id="searchOrders" placeholder="Search orders...">
+            </div>
+        </div>
+
+        <div class="orders-grid" id="ordersList"></div>
+    </div>
+<script>
+function logoutAdmin() {
+    firebase.auth().signOut().then(() => {
+        window.location.href = "admin-login.html";
+    });
+}
+</script>
+
+    <script src="admin.js"></script>
+    <script>
+    
+        // ensure admin init
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof initAdminPanel === 'function') initAdminPanel();
+        });
+    </script>
+</body>
+</html>
